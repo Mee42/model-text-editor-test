@@ -1,0 +1,64 @@
+This is the help page!
+Here you can find lots of information about how to use this text editor!
+
+Read on for basic usage:
+
+In this text editor, there are several modes. The default is normal mode.
+
+Normal Mode:
+  In Normal mode, you can navigate around the buffer using the arrow keys.
+  The keys on the keyboard all have special meanings, and perform a
+  specified action immediately on keypress. You can see them all documented
+  later in this document. One important one is <i>, which switches the mode
+  to Insert Mode
+
+Insert Mode:
+  When in Insert mode, you can navigate around the buffer with the
+  arrow keys, and insert text by typing characters on the keyboard.
+  This is like a traditional text editor.
+  Press escape to go back to Normal mode.
+
+Command Mode:
+  You can reach Command mode by typing <:> in Normal mode. Command mode
+  allows you to run one or more 'commands', which are documented below.
+  Commands are shown and denoted by the preluding ':'.
+  Common ones include `:h` for help, ':w' for write, ':q' for quit, etc
+
+# What's this thing at the bottom of my screen?
+
+ > [NORMAL]   1/11  7   Error: Buffer is flagged as unwritable
+
+
+Step by step:
+
+>         | The number of '>'s signifies how many buffers are currently in the
+            hidden stack
+[NORMAL]  | The current mode
+1/11      | The current line, 1/The number of lines in the file, 11
+7         | The current column, 7
+
+Everything after those is the *message*, which is set specially for various
+reasons.
+
+
+Command Documentation:
+
+
+Here's some commands you can use:
+
+
+    :help  :h  shows this page
+    :quit  :q  quits the current buffer, or the program
+    :write :w  writes the buffer to the page
+
+Some commands take in arguments.
+
+    :w!  write force
+    :q!  quit force
+    :qa  quit all buffers
+
+You can also compose commands that take no arguments together, for example
+
+    :wq  write and then quit
+
+
