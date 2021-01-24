@@ -1,3 +1,15 @@
-h ello, wold!
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeyes, this is very nice!
+tthis is so cool lo
 
-Hello, world!
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+
+
+
+eeeeeeeeeeeeeeeeeeeeeeeeeeee
+
+ this is my test file!!! I'm going to add some lines to it
+
+
+then write it with :w, then quit
+
+eeeeeeeeHello, world!

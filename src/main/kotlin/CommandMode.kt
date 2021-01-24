@@ -132,6 +132,12 @@ class CommandMode: Mode {
             Command("b","buffer") { b, _ ->
                 // print information about the current buffer
                 b.message = ""//"Buffer: " + (if(b.writeable) "Writeable" else "Read-Only") + "  " +  (b.filename ?: "No File Name")
+            },
+            Command("up") { b, _ ->
+                b.scrub--
+            },
+            Command("down") { b, _ ->
+                b.scrub++
             }
     )
     
