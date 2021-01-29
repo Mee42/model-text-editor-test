@@ -10,56 +10,6 @@ import java.io.File
 import java.util.*
 
 
-fun renderBuffer(introBuffer: Boolean = false) {
-    // Render in passes, not with r, c iterations
-    
-    // start with the text
-    val buffer = if(introBuffer) generateIntroBuffer() else globalState.buffer
-    val bufferWidth = buffer.terminalSize.columns // the total number of columns
-
-    val lineNumbers = mutableListOf<Int>()
-    val lines = mutableListOf<String>() // TODO optimize out to immediate set
-
-
-    val textColumns = bufferWidth - 5 // how many columns the text is allowed to take up
-    val textRows = buffer.terminalSize.rows - 1 // idk, lets just say
-    run {
-        val linesToRender = buffer.data.subList(buffer.scrub, buffer.data.size) // trim the unrendered part of the list off
-        var row = 0
-//        log("lines to render: $linesToRender")
-        for ((index, line) in linesToRender.withIndex()) {
-            if(row >= textRows) break // no need to do extra work
-            val chunks = line.chunked(textColumns).takeUnless { it.isEmpty() } ?: listOf("")
-            lineNumbers.add(index + buffer.scrub + 1)
-//            log("line \"$line\", $chunks adding ${row + buffer.scrub + 1} ")
-            lineNumbers.addAll((-1).repeatIntoList(chunks.size - 1))
-            lines.addAll(chunks)
-            row += chunks.size
-        }
-    }
-//    log("$lines; $lineNumbers")
-    for(r in 0 until buffer.terminalSize.rows - 2) {
-        val lineToRender = lineNumbers.getOrNull(r)?.let {
-            (it.takeUnless { it == -1 }?.toString() ?: "" ).padEnd(3) + "| " + lines[r]
-        } ?: "~ "
-        for(c in 0 until buffer.terminalSize.columns) {
-            globalState.screen.setCharacter(c, r, TextCharacter.fromCharacter(if(c < lineToRender.length)  lineToRender[c] else ' ')[0])
-        }
-    }
-    val bottomLine = "" + ">".repeat(globalState.temporaryBuffers.size) + " [${globalState.mode.name}]".padEnd(10) + "  " + (buffer.cursorRow + 1) + "/" + buffer.data.size + "  " + buffer.cursorCol +
-            (buffer.message?.let { "   $it" } ?: "")
-    for(c in 0 until globalState.screen.terminalSize.columns) {
-        // we need to render the mode name, and, uh, say the line number/the other line number
-        globalState.screen.setCharacter(c, globalState.screen.terminalSize.rows - 1,  TextCharacter.fromCharacter(bottomLine.getOrNull(c) ?: ' ')[0])
-    }
-
-    val cursorRow = lineNumbers.indexOfFirst { buffer.cursorRow == it - 1 } + buffer.cursorCol / textColumns
-    val cursorCol = buffer.cursorCol % textColumns + 5
-    globalState.screen.cursorPosition = TerminalPosition(cursorCol, cursorRow)
-    globalState.visualCursorRow = cursorRow
-    globalState.screen.refresh()
-}
-
 fun <T> T.repeatIntoList(n: Int): List<T> {
     val x = mutableListOf<T>()
     for(i in 0 until n) x.add(this)
@@ -156,10 +106,6 @@ fun main(args: Array<String>) {
         val input = terminal.readInput()
         globalState.buffer.message = null
         globalState.mode.keystrokeIn(input, globalState.buffer)
-
-//        if(globalState.buffer.cursorRow < 0) error("overflow top")
-//        if(globalState.buffer.cursorCol < 0) error("overflow left")
-//        if(globalState.buffer.cursorCol > terminal.terminalSize.columns) error("overflow right")
         log("after key input (${input.keyType}) ${if(input.keyType == KeyType.Character) input.character else ""}  -  ${globalState.buffer.cursorRow}, ${globalState.buffer.cursorCol}  scrub = ${globalState.buffer.scrub}")
     }
 }
