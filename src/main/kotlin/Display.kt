@@ -9,6 +9,10 @@ val backgroundColor = TextColor.RGB(30, 30, 30)
 
 fun renderBuffer(introBuffer: Boolean = false) {
     // Render in passes, not with r, c iterations
+    if(globalState.fullRewrite) {
+        globalState.screen.clear()
+        globalState.fullRewrite = false
+    }
 
     // start with the text
     val buffer = if(introBuffer) generateIntroBuffer() else globalState.buffer
@@ -78,7 +82,7 @@ class CharData(val foreground: TextColor, val background: TextColor?)
 val tokenTypes = listOf("KEYWORD","IDENTIFIER","NUMBER","STRING","OPERATOR", "DEFAULT")
 
 val regexs = listOf(
-        Regex("^(fun|val|var|import|for|if|else|switch|package|return|class|interface|enum|data)") to "KEYWORD",
+        Regex("^(fun|val|var|import|for|if|else|switch|package|return|class|interface|enum|data)\\b") to "KEYWORD",
         Regex("^[a-z_][a-zA-Z0-9_]*") to "IDENTIFIER",
         Regex("^[A-Z][a-zA-z0-9_]*") to "TYPE",
         Regex("^[0-9]+") to "NUMBER",

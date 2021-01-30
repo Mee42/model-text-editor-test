@@ -23,7 +23,7 @@ class GlobalState(
         var mode: Mode,
         val screen: TerminalScreen,
 ) {
-    
+    var fullRewrite = false
     var visualCursorRow = 0
     
     fun escapeMode() {
@@ -96,6 +96,10 @@ fun main(args: Array<String>) {
             writeable = true,
             unsaved = false
     )
+    terminal.terminal.addResizeListener { _, newSize ->
+        globalState.buffer.terminalSize = newSize
+        globalState.fullRewrite = true
+    }
 
     globalState = GlobalState(starterBuffer, ArrayDeque(), NormalMode, terminal)
     var intro = file == null // don't show the intro if there's a file loaded

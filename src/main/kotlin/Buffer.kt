@@ -46,8 +46,9 @@ data class Buffer(
     }
     fun cursorDown(): Boolean {
         if(cursorRow < data.size - 1) {
-            if(terminalSize.rows - 3 <= globalState.visualCursorRow) {
+            while(terminalSize.rows - 3 <= globalState.visualCursorRow) {
                 scrub++
+                renderBuffer()
             }
             cursorRow++
             shiftColLeftIfNeeded()
